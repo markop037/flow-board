@@ -1,10 +1,5 @@
-import axios from 'axios'
 import type { Task, TaskCreate, TaskListParams, TaskUpdate } from '../types/task'
-
-const http = axios.create({
-  baseURL: '/api/v1',
-  headers: { 'Content-Type': 'application/json' },
-})
+import { http } from './client'
 
 export const taskApi = {
   list(params?: TaskListParams): Promise<Task[]> {

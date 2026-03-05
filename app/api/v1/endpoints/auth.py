@@ -7,9 +7,27 @@ from sqlalchemy.orm import Session
 from app.core.security import create_access_token, create_refresh_token
 from app.db.session import get_db
 from app.schemas.token import Token
+from app.schemas.user import UserCreate
 from app.services import user as user_service
 
 router = APIRouter()
+
+
+@router.post("/signup", response_model=Token, status_code=status.HTTP_201_CREATED)
+def signup(
+    db: Annotated[Session, Depends(get_db)],
+    user_in: UserCreate,
+) -> Token:
+    if user_service.get_by_email(db, user_in.email):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="A user with this email already exists",
+        )
+    user = user_service.create(db, user_in)
+    return Token(
+        access_token=create_access_token(subject=str(user.id)),
+        refresh_token=create_refresh_token(subject=str(user.id)),
+    )
 
 
 @router.post("/login", response_model=Token)

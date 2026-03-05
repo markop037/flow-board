@@ -32,3 +32,27 @@ def test_login_nonexistent_user(client: TestClient) -> None:
         data={"username": "ghost@example.com", "password": "whatever"},
     )
     assert response.status_code == 401
+
+
+def test_signup_success(client: TestClient, db: Session) -> None:
+    response = client.post(
+        "/api/v1/auth/signup",
+        json={
+            "email": "newuser@example.com",
+            "password": "securepass123",
+            "full_name": "New User",
+        },
+    )
+    assert response.status_code == 201
+    data = response.json()
+    assert "access_token" in data
+    assert data["token_type"] == "bearer"
+
+
+def test_signup_duplicate_email(client: TestClient, db: Session) -> None:
+    user_service.create(db, UserCreate(email="dup@example.com", password="secret123"))
+    response = client.post(
+        "/api/v1/auth/signup",
+        json={"email": "dup@example.com", "password": "otherpass123"},
+    )
+    assert response.status_code == 409

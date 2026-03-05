@@ -22,7 +22,6 @@ class UserUpdate(BaseModel):
 
 class UserRead(UserBase):
     id: uuid.UUID
-    is_superuser: bool
 
     model_config = {"from_attributes": True}
 

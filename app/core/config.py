@@ -35,7 +35,10 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     # --- CORS ---
-    BACKEND_CORS_ORIGINS: Annotated[list[AnyHttpUrl] | str, BeforeValidator(parse_cors)] = []
+    BACKEND_CORS_ORIGINS: Annotated[list[AnyHttpUrl] | str, BeforeValidator(parse_cors)] = [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
 
     # --- PostgreSQL ---
     POSTGRES_SERVER: str
@@ -55,10 +58,5 @@ class Settings(BaseSettings):
             port=self.POSTGRES_PORT,
             path=self.POSTGRES_DB,
         )
-
-    # --- First superuser (seeded on startup) ---
-    FIRST_SUPERUSER_EMAIL: str = "admin@flowboard.dev"
-    FIRST_SUPERUSER_PASSWORD: str = "changeme"
-
 
 settings = Settings()  # type: ignore[call-arg]

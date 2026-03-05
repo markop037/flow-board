@@ -1,14 +1,17 @@
 import { useState } from 'react'
-import { Plus, Kanban, RefreshCw } from 'lucide-react'
+import { Plus, Kanban, RefreshCw, LogOut } from 'lucide-react'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { AuthView } from './components/Auth/AuthView'
 import { KanbanBoard } from './components/Board/KanbanBoard'
 import { TaskModal } from './components/Task/TaskModal'
 import { Button } from './components/ui/Button'
 import { useQueryClient } from '@tanstack/react-query'
 import { TASKS_KEY } from './hooks/useTasks'
 
-export default function App() {
+function AuthenticatedApp() {
   const [createOpen, setCreateOpen] = useState(false)
   const qc = useQueryClient()
+  const { logout } = useAuth()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-violet-50">
@@ -40,6 +43,15 @@ export default function App() {
               <Plus size={16} />
               New Task
             </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={logout}
+              title="Sign out"
+              className="text-slate-500"
+            >
+              <LogOut size={16} />
+            </Button>
           </div>
         </div>
       </header>
@@ -58,4 +70,18 @@ export default function App() {
       />
     </div>
   )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
+  )
+}
+
+function AppRouter() {
+  const { isAuthenticated } = useAuth()
+  if (!isAuthenticated) return <AuthView />
+  return <AuthenticatedApp />
 }

@@ -52,5 +52,5 @@ def delete(db: Session, board: Board) -> None:
 
 
 def assert_owner(board: Board, user: User) -> None:
-    if board.owner_id != user.id and not user.is_superuser:
+    if board.owner_id != user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
