@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import auth, boards, cards, columns, users
+from app.api.v1.endpoints import auth, boards, cards, columns, tasks, users
 
 api_router = APIRouter()
 
@@ -17,3 +17,4 @@ api_router.include_router(
     prefix="/boards/{board_id}/columns/{column_id}/cards",
     tags=["cards"],
 )
+api_router.include_router(tasks.router, prefix="/tasks", tags=["tasks"])
