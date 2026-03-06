@@ -10,10 +10,12 @@ from app.db.models.user import User
 from app.db.session import get_db
 from app.schemas.token import TokenPayload
 from app.services import user as user_service
+from app.ws.broadcaster import TaskBroadcaster, get_task_broadcaster
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
 DBSession = Annotated[Session, Depends(get_db)]
+TaskBroadcasterDep = Annotated[TaskBroadcaster, Depends(get_task_broadcaster)]
 
 
 def get_current_user(

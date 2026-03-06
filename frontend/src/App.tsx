@@ -1,16 +1,19 @@
 import { useState } from 'react'
-import { Plus, Kanban, RefreshCw, LogOut } from 'lucide-react'
+import { Plus, Kanban, LogOut } from 'lucide-react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { AuthView } from './components/Auth/AuthView'
 import { KanbanBoard } from './components/Board/KanbanBoard'
 import { TaskModal } from './components/Task/TaskModal'
 import { Button } from './components/ui/Button'
-import { useQueryClient } from '@tanstack/react-query'
-import { TASKS_KEY } from './hooks/useTasks'
+import { useTaskUpdatesWebSocket } from './hooks/useTaskUpdatesWebSocket'
+
+function TaskUpdatesSubscriber() {
+  useTaskUpdatesWebSocket()
+  return null
+}
 
 function AuthenticatedApp() {
   const [createOpen, setCreateOpen] = useState(false)
-  const qc = useQueryClient()
   const { logout } = useAuth()
 
   return (
@@ -26,15 +29,6 @@ function AuthenticatedApp() {
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => qc.invalidateQueries({ queryKey: TASKS_KEY })}
-              title="Refresh tasks"
-              className="text-slate-500"
-            >
-              <RefreshCw size={16} />
-            </Button>
             <Button size="sm" onClick={() => setCreateOpen(true)} className="sm:hidden">
               <Plus size={15} />
               <span>New</span>
@@ -55,6 +49,9 @@ function AuthenticatedApp() {
           </div>
         </div>
       </header>
+
+      {/* Live task updates for all users via WebSocket */}
+      <TaskUpdatesSubscriber />
 
       {/* Board */}
       <main className="mx-auto max-w-screen-2xl px-4 py-5 sm:px-6 sm:py-8">
