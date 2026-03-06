@@ -54,7 +54,6 @@
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-/* Override slideUp to zoomIn on sm+ breakpoints */
 @media (min-width: 640px) {
   @keyframes slideUp {
     from { transform: scale(0.95); opacity: 0; }

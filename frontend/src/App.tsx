@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { Plus, Kanban, LogOut } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { AuthView } from './components/Auth/AuthView'
+import { DashboardLayout } from './components/Layout/DashboardLayout'
 import { KanbanBoard } from './components/Board/KanbanBoard'
-import { TaskModal } from './components/Task/TaskModal'
+import { TaskSlideOver } from './components/Task/TaskSlideOver'
 import { Button } from './components/ui/Button'
 import { useTaskUpdatesWebSocket } from './hooks/useTaskUpdatesWebSocket'
+import type { Task, TaskStatus } from './types/task'
 
 function TaskUpdatesSubscriber() {
   useTaskUpdatesWebSocket()
@@ -13,59 +15,63 @@ function TaskUpdatesSubscriber() {
 }
 
 function AuthenticatedApp() {
-  const [createOpen, setCreateOpen] = useState(false)
   const { logout } = useAuth()
+  const [slideOverOpen, setSlideOverOpen] = useState(false)
+  const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [defaultStatus, setDefaultStatus] = useState<TaskStatus>('TO_DO')
+
+  const openCreate = () => {
+    setEditingTask(null)
+    setDefaultStatus('TO_DO')
+    setSlideOverOpen(true)
+  }
+
+  const openEdit = (task: Task, status: TaskStatus) => {
+    setEditingTask(task)
+    setDefaultStatus(status)
+    setSlideOverOpen(true)
+  }
+
+  const openCreateInColumn = (status: TaskStatus) => {
+    setEditingTask(null)
+    setDefaultStatus(status)
+    setSlideOverOpen(true)
+  }
+
+  const closeSlideOver = () => {
+    setSlideOverOpen(false)
+    setEditingTask(null)
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-white to-violet-50">
-      {/* Top bar */}
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-600 text-white">
-              <Kanban size={16} />
-            </div>
-            <span className="text-base font-bold text-slate-800 sm:text-lg">Flow Board</span>
-          </div>
-
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <Button size="sm" onClick={() => setCreateOpen(true)} className="sm:hidden">
-              <Plus size={15} />
-              <span>New</span>
-            </Button>
-            <Button onClick={() => setCreateOpen(true)} className="hidden sm:inline-flex">
-              <Plus size={16} />
-              New Task
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={logout}
-              title="Sign out"
-              className="text-slate-500"
-            >
-              <LogOut size={16} />
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* Live task updates for all users via WebSocket */}
+    <DashboardLayout
+      mainTitle="Board"
+      onLogout={logout}
+      headerActions={
+        <>
+          <Button size="sm" onClick={openCreate} className="sm:hidden">
+            <Plus size={16} />
+            New
+          </Button>
+          <Button onClick={openCreate} className="hidden sm:inline-flex">
+            <Plus size={16} />
+            New Task
+          </Button>
+        </>
+      }
+    >
       <TaskUpdatesSubscriber />
-
-      {/* Board */}
-      <main className="mx-auto max-w-screen-2xl px-4 py-5 sm:px-6 sm:py-8">
-        <KanbanBoard />
-      </main>
-
-      {/* Global create modal */}
-      <TaskModal
-        open={createOpen}
-        onClose={() => setCreateOpen(false)}
-        task={null}
-        defaultStatus="TO_DO"
+      <KanbanBoard
+        onOpenCreate={openCreateInColumn}
+        onOpenEdit={openEdit}
       />
-    </div>
+      <TaskSlideOver
+        open={slideOverOpen}
+        onClose={closeSlideOver}
+        task={editingTask}
+        defaultStatus={defaultStatus}
+      />
+    </DashboardLayout>
   )
 }
 

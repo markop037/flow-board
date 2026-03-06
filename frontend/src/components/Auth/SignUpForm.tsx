@@ -43,15 +43,18 @@ export function SignUpForm() {
     }
   }
 
+  const inputClass =
+    'w-full rounded-xl border border-stone-200 px-4 py-2.5 text-stone-800 placeholder-stone-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20'
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-2.5 text-sm text-rose-700" role="alert">
+        <div className="rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-700" role="alert">
           {error}
         </div>
       )}
       <div>
-        <label htmlFor="signup-email" className="mb-1 block text-sm font-medium text-slate-700">
+        <label htmlFor="signup-email" className="mb-1.5 block text-sm font-medium text-stone-700">
           Email
         </label>
         <input
@@ -60,15 +63,15 @@ export function SignUpForm() {
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+          className={inputClass}
           placeholder="you@example.com"
         />
         {email && !EMAIL_RE.test(email) && (
-          <p className="mt-1 text-xs text-rose-600">Enter a valid email address.</p>
+          <p className="mt-1 text-xs text-red-600">Enter a valid email address.</p>
         )}
       </div>
       <div>
-        <label htmlFor="signup-password" className="mb-1 block text-sm font-medium text-slate-700">
+        <label htmlFor="signup-password" className="mb-1.5 block text-sm font-medium text-stone-700">
           Password
         </label>
         <input
@@ -77,18 +80,18 @@ export function SignUpForm() {
           autoComplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+          className={inputClass}
           placeholder="At least 8 characters"
         />
         {password && password.length < MIN_PASSWORD_LENGTH && (
-          <p className="mt-1 text-xs text-rose-600">
+          <p className="mt-1 text-xs text-red-600">
             Password must be at least {MIN_PASSWORD_LENGTH} characters.
           </p>
         )}
       </div>
       <div>
-        <label htmlFor="signup-name" className="mb-1 block text-sm font-medium text-slate-700">
-          Full name <span className="text-slate-400">(optional)</span>
+        <label htmlFor="signup-name" className="mb-1.5 block text-sm font-medium text-stone-700">
+          Full name <span className="text-stone-400">(optional)</span>
         </label>
         <input
           id="signup-name"
@@ -96,7 +99,7 @@ export function SignUpForm() {
           autoComplete="name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-slate-800 placeholder-slate-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
+          className={inputClass}
           placeholder="Jane Doe"
         />
       </div>

@@ -4,13 +4,13 @@ import { cn } from '../../lib/utils'
 type Variant = 'default' | 'low' | 'medium' | 'high' | 'todo' | 'inprogress' | 'done'
 
 const variantClasses: Record<Variant, string> = {
-  default: 'bg-slate-100 text-slate-700',
-  low: 'bg-sky-100 text-sky-700',
-  medium: 'bg-amber-100 text-amber-700',
-  high: 'bg-rose-100 text-rose-700',
-  todo: 'bg-slate-100 text-slate-600',
-  inprogress: 'bg-violet-100 text-violet-700',
-  done: 'bg-emerald-100 text-emerald-700',
+  default: 'bg-stone-100 text-stone-700',
+  low: 'bg-sky-100 text-sky-800',
+  medium: 'bg-amber-100 text-amber-800',
+  high: 'bg-red-100 text-red-800',
+  todo: 'bg-slate-100 text-slate-700',
+  inprogress: 'bg-indigo-100 text-indigo-800',
+  done: 'bg-emerald-100 text-emerald-800',
 }
 
 interface BadgeProps {
@@ -23,7 +23,7 @@ export function Badge({ variant = 'default', children, className }: BadgeProps) 
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold',
+        'inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium',
         variantClasses[variant],
         className,
       )}

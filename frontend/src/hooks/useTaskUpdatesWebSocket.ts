@@ -18,7 +18,7 @@ interface TaskUpdateMessage {
 export function useTaskUpdatesWebSocket() {
   const queryClient = useQueryClient()
   const wsRef = useRef<WebSocket | null>(null)
-  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   useEffect(() => {
     const url = getTasksWebSocketUrl()
