@@ -19,7 +19,7 @@ export function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex min-h-screen bg-stone-50">
+    <div className="flex h-screen overflow-hidden bg-stone-50">
       {/* Mobile overlay */}
       <div
         className={cn(
@@ -33,7 +33,7 @@ export function DashboardLayout({
       {/* Sidebar — dark panel */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-stone-900 transition-transform duration-200 ease-out lg:static lg:z-0 lg:translate-x-0',
+          'fixed inset-y-0 left-0 z-50 flex h-screen w-72 flex-col bg-stone-900 transition-transform duration-200 ease-out lg:static lg:z-0 lg:h-screen lg:translate-x-0',
           sidebarOpen ? 'translate-x-0' : '-translate-x-full',
         )}
       >
@@ -54,7 +54,7 @@ export function DashboardLayout({
           </button>
         </div>
 
-        <nav className="flex-1 space-y-0.5 p-3">
+        <nav className="min-h-0 flex-1 space-y-0.5 overflow-y-auto p-3">
           <a
             href="#board"
             className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-stone-300 transition-colors hover:bg-stone-800 hover:text-white"
@@ -65,7 +65,7 @@ export function DashboardLayout({
           </a>
         </nav>
 
-        <div className="border-t border-stone-800 p-3">
+        <div className="shrink-0 border-t border-stone-800 p-3">
           {onLogout && (
             <Button
               variant="ghost"
@@ -98,8 +98,19 @@ export function DashboardLayout({
           </div>
         </header>
 
-        <main id="board" className="flex-1 overflow-auto p-4 sm:p-6">
+        <main id="board" className="flex-1 overflow-auto px-4 pt-4 pb-0 sm:px-6 sm:pt-6">
           {children}
+
+          <footer className="mt-6 -mx-4 sm:-mx-6 border-t border-stone-800 bg-stone-900 py-3">
+            <div className="flex items-center justify-center gap-2.5">
+              <div className="flex h-5 w-5 items-center justify-center rounded-md bg-teal-500 text-white">
+                <LayoutDashboard size={11} />
+              </div>
+              <span className="text-xs font-semibold tracking-tight text-stone-300">Flow Board</span>
+              <span className="text-stone-700">·</span>
+              <span className="text-xs text-stone-500">&copy; {new Date().getFullYear()} All rights reserved.</span>
+            </div>
+          </footer>
         </main>
       </div>
     </div>
