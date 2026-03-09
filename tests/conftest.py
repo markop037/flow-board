@@ -4,13 +4,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.api.deps import get_current_active_user
-from app.core.config import settings
 from app.db.base import Base
-from app.db.session import get_db
-from app.main import app
-from app.services import user as user_service
 from app.schemas.user import UserCreate
+from app.services import user as user_service
 
 # Use an in-memory SQLite DB for tests (fast, no Postgres needed)
 SQLALCHEMY_TEST_DATABASE_URL = "sqlite://"
@@ -43,6 +39,9 @@ def db() -> Session:
 
 @pytest.fixture()
 def client(db: Session) -> TestClient:
+    from app.db.session import get_db
+    from app.main import app
+
     def override_get_db():
         yield db
 
@@ -63,6 +62,8 @@ def test_user(db: Session):
 @pytest.fixture()
 def authenticated_client(client: TestClient, test_user) -> TestClient:
     """Client with Authorization header pre-set."""
+    from app.api.deps import get_current_active_user
+    from app.main import app
 
     def override_current_user():
         return test_user
