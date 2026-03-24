@@ -1,0 +1,30 @@
+# Git and env
+.git
+.gitignore
+.env
+.env.*
+!.env.docker.example
+
+# Python
+__pycache__
+*.py[cod]
+*.pyo
+.Python
+*.egg-info
+.venv
+venv
+env
+
+# Testing and IDE
+.pytest_cache
+.coverage
+htmlcov
+.vscode
+.idea
+
+# Frontend (not needed for API image)
+frontend
+
+# Docs and misc
+*.md
+!README.md

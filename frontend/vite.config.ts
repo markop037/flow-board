@@ -6,14 +6,14 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 5173,
-    // Proxy API and WebSocket to backend (port 8001)
+    // Proxy API and WebSocket to backend (port 8000)
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8001',
+        target: 'http://127.0.0.1:8000',
         changeOrigin: true,
       },
       '/ws': {
-        target: 'http://127.0.0.1:8001',
+        target: 'http://127.0.0.1:8000',
         ws: true,
       },
     },

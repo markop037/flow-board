@@ -1,0 +1,54 @@
+# Production-style Compose for FastAPI Kanban API + PostgreSQL
+# Usage: copy .env.docker.example to .env, then: docker compose up -d
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: flow-board-api:latest
+    container_name: flow-board-api
+    env_file: .env
+    environment:
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: 5432
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - kanban-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: flow-board-postgres
+    environment:
+      POSTGRES_USER: kanban
+      POSTGRES_PASSWORD: kanban
+      POSTGRES_DB: kanban_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kanban -d kanban_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - kanban-net
+
+volumes:
+  postgres_data:
+
+networks:
+  kanban-net:
+    driver: bridge

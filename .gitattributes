@@ -1,0 +1,2 @@
+# Ensure shell scripts use LF in repo so they work in Linux containers
+scripts/*.sh text eol=lf

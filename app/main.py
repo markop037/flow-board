@@ -47,6 +47,10 @@ def create_application() -> FastAPI:
     application.add_exception_handler(StarletteHTTPException, http_exception_handler)
     application.add_exception_handler(RequestValidationError, validation_exception_handler)
 
+    @application.get("/health", tags=["health"])
+    def health() -> dict[str, str]:
+        return {"status": "ok"}
+
     application.include_router(api_router, prefix=settings.API_V1_STR)
     application.include_router(ws_router)
 

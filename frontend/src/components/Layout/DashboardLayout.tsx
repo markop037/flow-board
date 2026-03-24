@@ -98,17 +98,26 @@ export function DashboardLayout({
           </div>
         </header>
 
-        <main id="board" className="flex-1 overflow-auto px-4 pt-4 pb-0 sm:px-6 sm:pt-6">
-          {children}
+        <main
+          id="board"
+          className="flex flex-1 flex-col overflow-auto px-4 pt-4 pb-0 sm:px-6 sm:pt-6"
+        >
+          <div className="flex-1">
+            {children}
+          </div>
 
-          <footer className="mt-6 -mx-4 sm:-mx-6 border-t border-stone-800 bg-stone-900 py-3">
-            <div className="flex items-center justify-center gap-2.5">
-              <div className="flex h-5 w-5 items-center justify-center rounded-md bg-teal-500 text-white">
-                <LayoutDashboard size={11} />
+          <footer className="mt-auto pt-6 -mx-4 sm:-mx-6 border-t border-stone-800 bg-stone-900 py-3">
+            <div className="mx-auto w-full max-w-72 px-3">
+              <div className="flex items-center justify-center gap-2.5 text-center">
+                <div className="flex h-5 w-5 items-center justify-center rounded-md bg-teal-500 text-white">
+                  <LayoutDashboard size={11} />
+                </div>
+                <span className="text-xs font-semibold tracking-tight text-stone-300">Flow Board</span>
+                <span className="text-stone-700">·</span>
+                <span className="text-center text-xs text-stone-500">
+                  &copy; {new Date().getFullYear()} All rights reserved.
+                </span>
               </div>
-              <span className="text-xs font-semibold tracking-tight text-stone-300">Flow Board</span>
-              <span className="text-stone-700">·</span>
-              <span className="text-xs text-stone-500">&copy; {new Date().getFullYear()} All rights reserved.</span>
             </div>
           </footer>
         </main>
